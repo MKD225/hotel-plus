@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>IGNORED</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/masterLayout.xhtml">
+            <ui:define name="content">
+                <p:layout>
+                    <p:growl id="messages"/>
+                    <p:layoutUnit position="west" size="300" collapsible="true" resizable="true" header="#{msgs.priceSection}">
+                        <h:form id="sections" prependId="false">
+                            <p:toolbar>
+                                <p:toolbarGroup align="left">
+                                    <p:commandButton type="button" value="#{msgs.add}" icon="ui-icon-plus" onclick="dlg1.show()"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:dataTable var="sect" value="#{priceBean.findSections()}" selection="#{priceBean.sections}" selectionMode="single" rowKey="#{sect.id}">
+                                <p:ajax event="rowSelect" update=":sections :price :addDialog"/>
+                                <p:column>
+                                    <f:facet name="header">
+                                        #{msgs.title}
+                                    </f:facet>
+                                    #{sect.name}
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        #{msgs.options}
+                                    </f:facet>
+                                    <p:commandButton icon="ui-icon-trash" action="#{priceBean.delSection(sect)}" update=":sections"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="center" header="#{msgs.pricePositions}">
+                        <h:form id="price" prependId="false">
+                            <p:toolbar>
+                                <p:toolbarGroup align="left">
+                                    <p:commandButton type="button" value="#{msgs.add}" icon="ui-icon-plus" onclick="dlg2.show()"/>
+                                </p:toolbarGroup>
+                            </p:toolbar>
+                            <p:dataTable id="prcT" var="prc" value="#{priceBean.findPrice()}">
+                                <p:column>
+                                    <f:facet name="header">
+                                        #{msgs.title}
+                                    </f:facet>
+                                    #{prc.name}
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        #{msgs.cost}
+                                    </f:facet>
+                                    <h:outputText value="#{prc.cost}">
+                                        <f:convertNumber type="currency" locale="#{localeManager.language}" currencyCode="UAH"/>
+                                    </h:outputText>                                    
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        #{msgs.options}
+                                    </f:facet>
+                                    <p:commandButton icon="ui-icon-trash" action="#{priceBean.delPrice(prc)}" update=":price :messages"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:layoutUnit>
+                </p:layout>
+                <p:dialog id="addSecDialog" widgetVar="dlg1" resizable="false" header="#{msgs.add}">
+                    <h:form>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel for="title" value="#{msgs.title}:"/>
+                            <p:inputText id="title" value="#{priceBean.sections.name}"/>
+                        </h:panelGrid>
+                        <p:commandButton value="#{msgs.add}" update=":sections" oncomplete="dlg1.hide()" action="#{priceBean.addSection()}" ajax="false"/>
+                    </h:form>    
+                </p:dialog>
+                <p:dialog id="addDialog" widgetVar="dlg2" resizable="false" header="#{msgs.add}">
+                    <h:form>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel for="cat" value="#{msgs.section}:"/>
+                            <p:selectOneMenu id="cat" value="#{priceBean.secId}">
+                                <f:selectItems value="#{priceBean.findSections()}" var="sctn" itemLabel="#{sctn.name}" itemValue="#{sctn.id}"/>
+                            </p:selectOneMenu>
+                            <h:outputLabel for="title2" value="#{msgs.title}:"/>
+                            <p:inputText id="title2" value="#{priceBean.price.name}"/>
+                            <h:outputLabel for="cst" value="#{msgs.cost}:"/>
+                            <p:inputText id="cst" value="#{priceBean.price.cost}"/>
+                        </h:panelGrid>
+                        <p:commandButton value="#{msgs.add}" update=":price" oncomplete="dlg2.hide()" action="#{priceBean.addPrice()}" ajax="false"/>
+                    </h:form>
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

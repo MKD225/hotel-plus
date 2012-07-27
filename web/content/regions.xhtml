@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/references.xhtml">
+            <ui:define name="reference">
+                <p:growl/>
+                <h:form id="regs" prependId="false">
+                    <p:panel header="#{msgs.regions}">
+                        <p:toolbar>  
+                            <p:toolbarGroup align="left">  
+                                <p:commandButton value="#{msgs.add}" icon="ui-icon-plus" update="regT" onclick="dlg.show()"/> 
+                            </p:toolbarGroup>  
+                        </p:toolbar> 
+                        <p:dataTable id="regT" var="reg" value="#{regionsBean.findRegions()}"
+                                     paginator="true" rows="10"
+                                     paginatorTemplate="
+                                     {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="5,10,15"> 
+                            <p:column headerText="#{msgs.region}" sortBy="#{reg.name}" filterBy="#{reg.name}">
+                                #{reg.name}
+                            </p:column>
+                            <p:column headerText="#{msgs.country}" sortBy="#{reg.country.name}" filterBy="#{reg.country.name}">
+                                #{reg.country.name}
+                            </p:column>
+                            <p:column headerText="#{msgs.options}">
+                                <p:commandButton icon="ui-icon-trash" action="#{regionsBean.delRegion(reg)}" update=":regs"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+                <p:dialog id="addDialog" widgetVar="dlg" resizable="false" header="#{msgs.add}">
+                    <h:form>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel for="ctr" value="#{msgs.country}:"/>
+                            <p:selectOneMenu id="ctr" value="#{regionsBean.countryId}" >
+                                <f:selectItems value="#{countries.findCountries()}" var="country" itemValue="#{country.id}" itemLabel="#{country.name}"/>
+                            </p:selectOneMenu>
+                            <h:outputLabel for="rg" value="#{msgs.region}:"/>
+                            <p:inputText id="rg" value="#{regionsBean.regions.name}"/>
+                        </h:panelGrid>
+                        <p:commandButton value="#{msgs.add}" update=":regT" oncomplete="dlg.hide()" action="#{regionsBean.addRegion()}" ajax="false"/>
+                    </h:form>    
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

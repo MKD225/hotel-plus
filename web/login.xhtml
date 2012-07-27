@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>#{msgs.logIn}</title>
+        <h:outputStylesheet library="css" name="styles.css"/>
+    </h:head>
+    <h:body>
+        <f:view locale="#{localeManager.locale}">
+            <p:layout fullPage="true">
+                <p:layoutUnit position="north" size="100">  
+                    <h:panelGrid columns="1" class="alignCenter">
+                        <f:attribute name="align" value="right"/>
+                        <h:outputText value="#{msgs.programName}" style="font-size: xx-large;"/>
+                        <h:outputText value="#{msgs.programDescription}"/>
+                    </h:panelGrid>
+                </p:layoutUnit>  
+                <p:layoutUnit position="center">
+                    <h:form id="loginfm">
+                        <p:growl id="messages"/>
+                        <h:panelGrid style="margin-left: auto; margin-right: auto; margin-top: 10%">
+                            <p:fieldset id="logPanel" legend="#{msgs.logIn}"> 
+                                <h:panelGrid columns="2">
+                                    <h:panelGrid columns="2">
+                                        <h:outputText value="#{msgs.login}" />
+                                        <p:inputText value="#{user.login}" required="true" label="Login" requiredMessage="#{msgs.login} #{msgs.notFilled}"/>
+                                        <h:outputText value="#{msgs.pass}" />
+                                        <p:password value="#{user.pass}" required="true" feedback="false" requiredMessage="#{msgs.pass} #{msgs.notFilled}"/>
+                                    </h:panelGrid>
+                                    <h:graphicImage library="images" name="forms/lock.png"/>
+                                </h:panelGrid>
+                                <p:commandButton value="#{msgs.signIn}" action="#{user.logIn}" update="loginfm" ajax="false"/>
+                            </p:fieldset>
+                        </h:panelGrid>
+                    </h:form>
+                </p:layoutUnit>
+                <p:layoutUnit position="south" size="50">  
+                    <ui:insert name="footer">
+                        <h:outputText value="#{msgs.copyrightText}" class="alignCenter"/>
+                    </ui:insert>
+                </p:layoutUnit> 
+            </p:layout>
+        </f:view>
+    </h:body>
+</html>
+

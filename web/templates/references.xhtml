@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>IGNORED</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/masterLayout.xhtml">
+            <ui:define name="content">
+                <p:layout>
+                    <p:layoutUnit position="west">
+                        <h:form>
+                            <p:menu>
+                                <p:menuitem value="#{msgs.countries}" action="/content/countries?faces-redirect=true"/>
+                                <p:menuitem value="#{msgs.regions}" action="/content/regions?faces-redirect=true"/>
+                                <p:menuitem value="#{msgs.cities}" action="/content/cities?faces-redirect=true"/>
+                                <p:menuitem value="#{msgs.doctypes}" action="/content/doctypes?faces-redirect=true"/>
+                            </p:menu>
+                        </h:form>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="center">
+                        <ui:insert name="reference"/>
+                    </p:layoutUnit>
+                </p:layout>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

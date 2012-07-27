@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>IGNORED</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/masterLayout.xhtml">
+            <ui:define name="headscript">
+                <h:outputScript library="javascript" name="calendar.js"/>
+            </ui:define>
+            <ui:define name="content">
+                <p:layout>
+                    <p:layoutUnit position="west" collapsible="true" header="#{msgs.guests}" size="250">
+                        <h:form prependId="false" id="gsts">
+                            <p:dataTable var="gst" value="#{guestsBean.all}" rowKey="#{gst.id}" selection="#{guestsBean.guests}" selectionMode="single">
+                                <p:ajax event="rowSelect" update=":gsts :frms"/>
+                                <p:column filterBy="#{gst.surname}">
+                                    <f:facet name="header">
+                                        #{msgs.guests}
+                                    </f:facet>
+                                    <h:outputText value="#{gst.surname} #{gst.name}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        #{msgs.options}
+                                    </f:facet>
+                                    <p:commandButton icon="ui-icon-trash" action="#{guestsBean.delGuest(gst)}" update=":gsts :frms :frms:city"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="center" header="#{msgs.form}">
+                        <h:form id="frms">
+                            <p:growl id="messages"/>
+                            <p:toolbar>  
+                                <p:toolbarGroup align="left">  
+                                    <p:commandButton action="#{guestsBean.newGuest}" value="#{msgs.create}" icon="ui-icon-document" update="frms :gsts"/> 
+                                    <p:commandButton action="#{guestsBean.saveGuest}" value="#{msgs.save}" icon="ui-icon-disk" update="frms :gsts"/> 
+                                    <p:separator />  
+                                    <p:commandButton type="button" value="#{msgs.print}" icon="ui-icon-print"/>  
+                                </p:toolbarGroup>  
+                            </p:toolbar> 
+                            <h:panelGrid columns="1" cellpadding="5">
+                                <p:fieldset legend="#{msgs.formsPersInfo}" toggleable="true">
+                                    <h:panelGrid columns="2" id="pg">
+                                        <h:outputLabel for="surname" value="#{msgs.surname}"/>
+                                        <p:inputText id="surname" value="#{guestsBean.guests.surname}" label="Surname" required="true"/>
+                                        <h:outputLabel for="name" value="#{msgs.name}"/>
+                                        <p:inputText id="name" value="#{guestsBean.guests.name}" label="Firsname" required="true"/>
+                                        <h:outputLabel for="patronymic" value="#{msgs.patronymic}"/>
+                                        <p:inputText id="patronymic" value="#{guestsBean.guests.patronymic}" label="Patronymic"/>
+                                        <h:outputLabel for="phone" value="#{msgs.phone}"/>
+                                        <p:inputText id="phone" value="#{guestsBean.guests.phone}" label="Phone"/>
+                                        <h:outputLabel for="birth" value="#{msgs.birthdate}"/>
+                                        <h:panelGroup id="birth">
+                                            <p:calendar value="#{guestsBean.guests.birthday}" locale="#{localeManager.locale}" navigator="true" yearRange="c-40:c"/>
+                                        </h:panelGroup>
+                                        <h:outputLabel for="gender" value="#{msgs.gender}"/>
+                                        <p:selectOneRadio id="gender" value="#{guestsBean.guests.gender}">
+                                            <f:selectItem itemLabel="#{msgs.male}" itemValue="true"/>
+                                            <f:selectItem itemLabel="#{msgs.female}" itemValue="false"/>
+                                        </p:selectOneRadio>
+                                    </h:panelGrid>
+                                </p:fieldset>
+
+                                <p:fieldset legend="#{msgs.formsDocuments}" toggleable="true">
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel for="doctype" value="#{msgs.docType}"/>
+                                        <p:selectOneMenu id="doctype" value="#{guestsBean.doctypeId}">
+                                            <f:selectItems value="#{guestsBean.findDoctypes()}" var="doct" itemLabel="#{doct.name}" itemValue="#{doct.id}"/>
+                                        </p:selectOneMenu>
+                                        <h:outputLabel for="docnum" value="#{msgs.serNum}"/>
+                                        <p:inputText id="docnum" value="#{guestsBean.guests.docnum}" label="SerNum"/>
+                                    </h:panelGrid>
+                                </p:fieldset>
+                                <p:fieldset legend="#{msgs.formsRegInfo}" toggleable="true">
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel for="country" value="#{msgs.country}:"/>
+                                        <p:selectOneMenu id="country" value="#{guestsBean.countryId}" >
+                                            <f:selectItems value="#{countries.findCountries()}" var="cntr" itemLabel="#{cntr.name}" itemValue="#{cntr.id}"/>
+                                            <p:ajax update="region"/>
+                                        </p:selectOneMenu>
+                                        <h:outputLabel for="region" value="#{msgs.region}:"/>
+                                        <p:selectOneMenu id="region" value="#{guestsBean.regionId}" >
+                                            <f:selectItems value="#{regionsBean.findByCountry(guestsBean.countryId)}" var="rgn" itemLabel="#{rgn.name}" itemValue="#{rgn.id}"/>
+                                            <p:ajax update="city"/>
+                                        </p:selectOneMenu>
+                                        <h:outputLabel for="city" value="#{msgs.city}:"/>
+                                        <p:selectOneMenu id="city" value="#{guestsBean.cityId}">
+                                            <f:selectItems value="#{citiesBean.findByRegion(guestsBean.regionId)}" var="ct" itemLabel="#{ct.name}" itemValue="#{ct.id}"/>
+                                        </p:selectOneMenu>
+                                        <h:outputLabel for="address" value="#{msgs.address}"/>
+                                        <p:inputText id="address" value="#{guestsBean.guests.address}" label="address"/>
+                                    </h:panelGrid>
+                                </p:fieldset>
+                            </h:panelGrid>
+                        </h:form>
+                    </p:layoutUnit>
+                </p:layout>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

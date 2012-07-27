@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/references.xhtml">
+            <ui:define name="reference">
+                <p:growl/>
+                <h:form id="dts">
+                    <p:panel header="#{msgs.references} :: #{msgs.doctypes}">
+                        <p:toolbar>  
+                            <p:toolbarGroup align="left">  
+                                <p:commandButton value="#{msgs.add}" icon="ui-icon-plus" update="dtT" onclick="dlg.show()"/> 
+                            </p:toolbarGroup>  
+                        </p:toolbar> 
+                        <p:dataTable id="dtT" var="dt" value="#{doctypesBean.findDoctypes()}"
+                                     paginator="true" rows="10"
+                                     paginatorTemplate="
+                                     {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="5,10,15"> 
+                            <p:column sortBy="#{dt.name}" filterBy="#{dt.name}">
+                                <f:facet name="header">
+                                    #{msgs.docType}
+                                </f:facet>
+                                #{dt.name}
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    #{msgs.options}
+                                </f:facet>
+                                <p:commandButton icon="ui-icon-trash" action="#{doctypesBean.delDoctype(dt)}" update=":dts"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+                <p:dialog id="addDialog" widgetVar="dlg" resizable="false" header="#{msgs.add}">
+                    <h:form>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel for="title" value="#{msgs.docType}:"/>
+                            <p:inputText value="#{doctypesBean.doctypes.name}"/>
+                        </h:panelGrid>
+                        <p:commandButton value="#{msgs.add}" update=":dtT" oncomplete="dlg.hide()" action="#{doctypesBean.addDoctype()}" ajax="false"/>
+                    </h:form>    
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,35 @@
+/* 
+    Document   : styles
+    Created on : 25.04.2012, 10:39:21
+    Author     : vgladky
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.ui-widget {
+    font-size: 75% !important;
+}
+
+.ui-widget .ui-widget {
+    font-size: 100% !important;
+}
+
+.ui-layout-north {
+    z-index:20 !important;
+    overflow:visible !important;;
+}
+
+.ui-layout-south {
+    z-index:20 !important;
+    overflow:visible !important;;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+}
+
+.alignCenter {
+    text-align: center;
+    position: absolute;
+    width:100%;
+}

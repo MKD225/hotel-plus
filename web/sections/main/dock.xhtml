@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>IGNORED</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <h:form>
+                <p:dock maxWidth="64" itemWidth="48">  
+                    <p:menuitem value="#{msgs.sectForms}" icon="/resources/images/dock/forms.png" action="/content/forms?faces-redirect=true"/>  
+                    <p:menuitem value="#{msgs.sectSettlement}" icon="/resources/images/dock/settlement.png" action="/content/settlement?faces-redirect=true"/>  
+                    <p:menuitem value="#{msgs.sectReferences}" icon="/resources/images/dock/references.png" action="/templates/references?faces-redirect=true"/>  
+                    <p:menuitem value="#{msgs.sectPriceList}" icon="/resources/images/dock/price.png" action="/content/price?faces-redirect=true"/>  
+                    <p:menuitem value="#{msgs.sectHistory}" icon="/resources/images/dock/calendar.png" url="#"/>  
+                    <p:menuitem value="#{msgs.sectHelp}" icon="/resources/images/dock/help.png" url="#"/>                
+                </p:dock>     
+            </h:form>
+        </ui:composition>
+    </h:body>
+</html>
+

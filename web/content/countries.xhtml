@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>IGNORED</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/templates/references.xhtml">
+            <ui:define name="reference">
+                <p:growl/>
+                <h:form id="cntrs">
+                    <p:panel header="#{msgs.countries}">
+                        <p:toolbar>  
+                            <p:toolbarGroup align="left">  
+                                <p:commandButton value="#{msgs.add}" icon="ui-icon-plus" update="ctrT" onclick="dlg.show()"/> 
+                            </p:toolbarGroup>  
+                        </p:toolbar> 
+                        <p:dataTable id="ctrT" var="ctr" value="#{countries.findCountries()}"
+                                     paginator="true" rows="10"
+                                     paginatorTemplate="
+                                     {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="5,10,15"> 
+                            <p:column sortBy="#{ctr.name}" filterBy="#{ctr.name}">
+                                <f:facet name="header">
+                                    #{msgs.country}
+                                </f:facet>
+                                #{ctr.name}
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    #{msgs.options}
+                                </f:facet>
+                                <p:commandButton icon="ui-icon-trash" action="#{countries.delCountry(ctr)}" update=":cntrs"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+                <p:dialog id="addDialog" widgetVar="dlg" resizable="false" header="#{msgs.add}">
+                    <h:form>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel for="title" value="#{msgs.country}:"/>
+                            <p:inputText value="#{countries.countries.name}"/>
+                        </h:panelGrid>
+                        <p:commandButton value="#{msgs.add}" update=":ctrT" oncomplete="dlg.hide()" action="#{countries.addCountry}" ajax="false"/>
+                    </h:form>    
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
